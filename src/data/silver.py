@@ -41,19 +41,24 @@ def process_bronze_to_silver(
         # 3. Data Quality Gate (Great Expectations)
         validate_silver_transactions(df_silver)
         
-        # 4. Write to Silver (Delta)
-        # We can re-partition by ingestion_date or a more optimized column for analysis
-        logger.info(f"Writing to Silver layer (Delta): {silver_path}")
-        (
-            df_silver.write
-            .format("delta")
-            .mode("overwrite")
-            .option("overwriteSchema", "true")
-            .partitionBy("ingestion_date")
-            .save(silver_path)
-        )
+        # 4. Chronological Split
+        split_date = "2023-10-20 12:00:00"
+        logger.info(f"Splitting data chronologically at {split_date}")
         
-        logger.success(f"Silver layer processing complete. Saved to {silver_path}")
+        df_train = df_silver.filter(col("timestamp") < split_date)
+        df_test = df_silver.filter(col("timestamp") >= split_date)
+        
+        # 5. Write to Silver (Delta)
+        train_path = f"{silver_path}/train"
+        test_path = f"{silver_path}/test"
+        
+        logger.info(f"Writing Train set to {train_path}")
+        df_train.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(train_path)
+        
+        logger.info(f"Writing Test set to {test_path}")
+        df_test.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save(test_path)
+        
+        logger.success("Silver layer processing and splitting complete.")
         
     except Exception as e:
         logger.exception(f"Error during Silver layer processing: {e}")
