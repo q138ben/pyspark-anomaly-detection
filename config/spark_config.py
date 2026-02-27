@@ -20,6 +20,10 @@ def get_spark_session(app_name: str = "FinancialAnomalyPipeline", master: str = 
             SparkSession.builder
             .appName(app_name)
             .master(master)
+            # Delta Lake Configuration
+            .config("spark.jars.packages", "io.delta:delta-spark_2.12:3.2.0")
+            .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+            .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
             # Adaptive Query Execution (AQE)
             .config("spark.sql.adaptive.enabled", "true")
             # Kryo Serializer for efficiency

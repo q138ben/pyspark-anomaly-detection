@@ -156,9 +156,15 @@ cython_debug/
 # Project Specific
 data/raw/*
 data/interim/*
+data/bronze/*
+data/silver/*
+data/gold/*
 data/processed/*
 !data/raw/.gitkeep
 !data/interim/.gitkeep
+!data/bronze/.gitkeep
+!data/silver/.gitkeep
+!data/gold/.gitkeep
 !data/processed/.gitkeep
 mlruns/
 outputs/
