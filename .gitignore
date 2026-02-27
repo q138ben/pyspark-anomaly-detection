@@ -159,12 +159,16 @@ data/interim/*
 data/bronze/*
 data/silver/*
 data/gold/*
+data/features/*
 data/processed/*
 !data/raw/.gitkeep
 !data/interim/.gitkeep
 !data/bronze/.gitkeep
 !data/silver/.gitkeep
 !data/gold/.gitkeep
+!data/features/.gitkeep
 !data/processed/.gitkeep
 mlruns/
+mlflow.db
 outputs/
+*.DS_Store

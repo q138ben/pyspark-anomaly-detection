@@ -26,6 +26,11 @@ def get_spark_session(app_name: str = "FinancialAnomalyPipeline", master: str = 
             .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
             # Adaptive Query Execution (AQE)
             .config("spark.sql.adaptive.enabled", "true")
+            # Memory Management
+            .config("spark.driver.memory", "8g")
+            .config("spark.executor.memory", "8g")
+            .config("spark.memory.offHeap.enabled", "true")
+            .config("spark.memory.offHeap.size", "2g")
             # Kryo Serializer for efficiency
             .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
             # Standardizing timezone
